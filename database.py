@@ -1,16 +1,18 @@
-#db setup file
+# db setup file
 
 import sqlite3, json
 from sqlite3 import Error
 
+
 def create_connection(database):
     try:
-        conn = sqlite3.connect(database, isolation_level=None, check_same_thread = False)
+        conn = sqlite3.connect(database, isolation_level=None, check_same_thread=False)
         conn.row_factory = lambda c, r: dict(zip([col[0] for col in c.description], r))
 
         return conn
     except Error as e:
         print(e)
+
 
 def create_table(c):
     sql = """ 
@@ -22,27 +24,40 @@ def create_table(c):
     """
     c.execute(sql)
 
+
 def create_item(c, item):
-    sql = ''' INSERT INTO items(name)
-                VALUES (?) '''
+    sql = """ INSERT INTO items(name)
+                VALUES (?) """
     c.execute(sql, item)
+
 
 def update_item(c, item):
-    sql = ''' UPDATE items
+    sql = """ UPDATE items
                 SET votes = votes+1 
-                WHERE name = ? '''
+                WHERE name = ? """
     c.execute(sql, item)
 
+
 def select_all_items(c, name):
-    sql = ''' SELECT * FROM items '''
+    sql = """ SELECT * FROM items """
     c.execute(sql)
 
     rows = c.fetchall()
-    rows.append({'name' : name})
+    rows.append({"name": name})
     return json.dumps(rows)
 
-def create_session(c, link): #incomplete still
+
+def create_session(c, link):  # incomplete still
     pass
+
+
+def get_all_items(c):
+    sql = """ SELECT * FROM items """
+    c.execute(sql)
+
+    rows = c.fetchall()
+    return json.dumps(rows)
+
 
 def main():
     database = "./pythonsqlite.db"
@@ -54,5 +69,6 @@ def main():
     create_item(conn, ["Ruby"])
     print("Connection established!")
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     main()
