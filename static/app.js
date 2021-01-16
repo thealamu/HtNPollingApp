@@ -30,7 +30,7 @@ var channel = pusher.subscribe("poll");
 
 var updateMembers = function (data) {
   console.log(data);
-  for (i = 0; i < data.length - 1; i++) {
+  for (i = 0; i < data.length; i++) {
     var total = data[0].votes + data[1].votes + data[2].votes + data[3].votes;
     document.getElementById(data[i].name).style.width = calculatePercentage(
       total,
