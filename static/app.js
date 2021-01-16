@@ -29,6 +29,7 @@ const pusher = new Pusher("4ac52c799ded4e369788", {
 var channel = pusher.subscribe("poll");
 
 var updateMembers = function (data) {
+  console.log(data);
   for (i = 0; i < data.length - 1; i++) {
     var total = data[0].votes + data[1].votes + data[2].votes + data[3].votes;
     document.getElementById(data[i].name).style.width = calculatePercentage(
@@ -46,3 +47,9 @@ let calculatePercentage = function (total, amount) {
   return (amount / total) * 100 + "%";
 };
 
+// Pull start data on page load
+window.onload = function () {
+  axios.get("http://localhost:5000/votes").then((resp) => {
+    updateMembers(resp.data);
+  });
+};
